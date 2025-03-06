@@ -10,8 +10,13 @@ import os
 def audio_converter(audio):
     if audio.dtype == 'int16':
         return audio.astype(np.float32, order='C') / 32768.0
+    elif audio.dtype == 'int32':
+        return audio.astype(np.float32, order='C') / 2147483648.0  # 2^31
+    elif audio.dtype == 'float32':
+        return audio  # Already in the right format
     else:
-        print('unimplemented audio data type conversion...')
+        print(f'Warning: Unknown audio data type {audio.dtype}, attempting float32 conversion...')
+        return audio.astype(np.float32)
 
 
 # Splits audio, each split marker determines the fraction of the total audio in that split, i.e [0.75, 0.25] will put
